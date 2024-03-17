@@ -17,18 +17,14 @@ def canUnlockAll(boxes):
         boxes = [[1], [2], [3], [4], []]
         canUnlockAll(boxes)  # Output: True
     """
-    if len(boxes) == 0:
-        return False
-
-    visited = [False] * len(boxes)
-    visited[0] = True
-    queue = [0]
-
-    while queue:
-        current_box = queue.pop(0)
-        for key in boxes[current_box]:
-            if not visited[key]:
-                visited[key] = True
-                queue.append(key)
-
-    return all(visited)
+    n = len(boxes)
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        boxIdx = unseen_boxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
+            seen_boxes.add(boxIdx)
+    return n == len(seen_boxes)
